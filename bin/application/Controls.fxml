@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+
+<GridPane id="main" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController" vgap="50" hgap="8">
+<padding> <Insets left="20.0" right="20.0" bottom="20.0" top="20.0"> </Insets></padding>
+<children>
+<Text id="title" text="Controls" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+<Text id="move" text="Move Left :" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+<Text id="key" text="A" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+<Text id="move" text="Move Right :" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+<Text id="key" text="D" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+<Text id="move" text="Shoot :" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+<Text id="key" text="Space Key" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+<Button id="button" text="Back" GridPane.columnIndex="0" GridPane.rowIndex="4" onAction="#handleBtnBack"/>
+
+</children>
+
+	
+</GridPane>
+

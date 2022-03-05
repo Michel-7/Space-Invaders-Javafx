@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<?import javafx.scene.layout.BorderPane?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.textfield.*?>
+	
+<BorderPane id="main" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+<top>
+<Text id="title" text="Space Invaders" BorderPane.alignment="CENTER"/>
+</top>
+<center>
+<VBox spacing="20" alignment="CENTER" >
+<children>
+<Button id="button" text="Play" onAction="#handleBtnPlay"/>
+<Button id="button" text="Controls" onAction="#handleBtnControls"/>
+</children>
+</VBox>
+
+</center>
+
+	
+	
+	
+</BorderPane>

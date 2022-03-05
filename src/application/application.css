@@ -1,0 +1,30 @@
+
+#main{
+	-fx-background-image:url("https://ak.picdn.net/shutterstock/videos/1055070605/thumb/1.jpg");
+	
+}
+
+#title{
+	-fx-font-size: 35px;
+	-fx-fill:#33e026 ;
+}
+
+#button{
+	-fx-cursor: hand;
+	-fx-background-radius: 10px;
+	-fx-border-radius: 10px;
+	-fx-pref-width: 150px;
+	-fx-background-color:#33e026;
+	-fx-font:16px "sans-serif";
+	-fx-text-fill: white;
+}
+
+#move{
+	-fx-font-size: 25px;
+	-fx-fill:#33e026 ;
+}
+
+#key{
+	-fx-font-size: 20px;
+	-fx-fill:white;
+}
