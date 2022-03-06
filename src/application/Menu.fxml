@@ -17,6 +17,8 @@
 <children>
 <Button id="button" text="Play" onAction="#handleBtnPlay"/>
 <Button id="button" text="Controls" onAction="#handleBtnControls"/>
+<Button id="button" text="Quit" onAction="#handleBtnQuit"/>
+
 </children>
 </VBox>
 

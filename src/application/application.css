@@ -24,7 +24,15 @@
 	-fx-fill:#33e026 ;
 }
 
+
 #key{
 	-fx-font-size: 20px;
 	-fx-fill:white;
+}
+
+#scoreLabel{
+	-fx-font-size: 20px;
+	-fx-fill:white;
+	-fx-font-family:'serif',cursive;
+	-fx-text-fill:white;
 }
