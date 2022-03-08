@@ -11,12 +11,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -24,33 +26,49 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 public class InvaderGame extends Pane{
+	static int highscore=0;
 	private int width=350;
 	private int height=350;
 	private double t=0;
+	private AudioClip bulletShot;
+	private AudioClip gameOverSound;
+	private AudioClip enemyDestroyedSound;
 	AnimationTimer timer;
 	boolean isOver=false;
 	int score=0;
 	Sprite player;
-	List<Sprite> spritesEnemy=new ArrayList<Sprite>();
+	ArrayList<Sprite> spritesEnemy;
 	
 	
 	public InvaderGame() {
-		
-		this.player=new Sprite(width/2,height,30,30,"player",Color.BLUE);
+		this.bulletShot = new AudioClip("file:///C:/Users/User/eclipse-workspace/i3305-project/assets/fireBullet.mp3");
+		this.gameOverSound=new AudioClip("file:///C:/Users/User/eclipse-workspace/i3305-project/assets/gameOver.mp3");
+		this.enemyDestroyedSound=new AudioClip("file:///C:/Users/User/eclipse-workspace/i3305-project/assets/enemyDestroyed.mp3");
+		Image playerShip=new Image("C:/Users/User/eclipse-workspace/i3305-project/assets/spaceship.png");
+		this.player=new Sprite(width/2,height,"player",playerShip);
+		spritesEnemy=new ArrayList<Sprite>();
 		this.timer=new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				
+				setHighScore(score);
 				update();
-				if(isEmpty()) {
+				if(isEmpty(spritesEnemy)) {
 					nextLevel();
+
+					getChildren().add(player);
+					startApp();
 				}
 				if(player.dead) {
 					this.stop();
+					gameOverSound.play();
 					Stage g = new GameOver();
 					((GameOver) g).display("Game Over!");
 					g.setOnHidden(e->{
 						if(((GameOver) g).back==2) {
+						
+							score=0;
+							
+							nextLevel();
 							addNewPlayer();
 							System.out.println("Reached back 2;");
 							this.start();
@@ -75,26 +93,38 @@ public class InvaderGame extends Pane{
 //		mediaPlayerOnShot.play();
 //	}
 	public void nextLevel() {
+		this.getChildren().clear();
 		for(int i=1;i<=4;i++) {
-			Sprite enemy=new Sprite(i*width/4-10,height/4-50,30,30,"enemy",Color.RED);
+			Image ship=new Image("C:/Users/User/eclipse-workspace/i3305-project/assets/enemyship.png");
+			Sprite enemy=new Sprite(i*width/4-10,height/4-50,"enemy",ship);
 			spritesEnemy.add(enemy);
 			this.getChildren().add(enemy);
 		}
 	}
 	public void addNewPlayer() {
-		player=new Sprite(width/2,height,30,30,"player",Color.BLUE);
+		Image ship=new Image("C:/Users/User/eclipse-workspace/i3305-project/assets/spaceship.png");
+
+		player=new Sprite(width/2,height,"player",ship);
 		InvaderGame.this.getChildren().add(player);
 	}
-	public boolean isEmpty() {
+	public boolean isEmpty(ArrayList<Sprite> spritesEnemy) {
 		return spritesEnemy.isEmpty();
 	}
 	public void shoot(Sprite who) {
-		Sprite bullet=new Sprite((int)who.getTranslateX()+15,(int)who.getTranslateY(),7,7,who.type+" bullet",Color.GOLD);
+		Image bulletImage=new Image("C:/Users/User/eclipse-workspace/i3305-project/assets/bullet.png");
+		Sprite bullet=new Sprite((int)who.getTranslateX()+16,(int)who.getTranslateY(),who.type+" bullet",bulletImage);
 		this.getChildren().add(bullet);
+		
+		bulletShot.play();
 	}
 	public List<Sprite> sprites(){
 		return this.getChildren().stream().map(n->(Sprite)n).collect(Collectors.toList());
 		
+	}
+	public void setHighScore(int score) {
+		if(score>highscore) {
+			highscore=score;
+		}
 	}
 	public void update() {
 		t+=0.016;
@@ -111,7 +141,6 @@ public class InvaderGame extends Pane{
 				break;
 			}
 			case "player bullet":{
-//				shotFiredSound();
 				s.moveUp();
 				sprites().stream().filter(e->e.type.equals("enemy")).forEach(enemy->{
 					if(s.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
@@ -124,7 +153,7 @@ public class InvaderGame extends Pane{
 			}
 			case "enemy":{
 				if(!s.dead) {
-				if(t>2 || (t>=0.032 && t<0.064)) {
+				if(t>2 ) {
 					if(Math.random()<0.3) {
 						shoot(s);
 					}
@@ -138,12 +167,10 @@ public class InvaderGame extends Pane{
 			Sprite s=(Sprite) n;
 			if(s.type.equals("enemy") && s.dead==true) {
 				score+=1;
+				spritesEnemy.remove(s);
+				enemyDestroyedSound.play();
 			}
-			if(s.dead && (!s.type.equals("enemy bullet") || !s.type.equals("player bullet"))) {
-				Media sound=new Media("https://rr4---sn-a5mekn6d.googlevideo.com/videoplayback?expire=1646570595&ei=A1gkYoPmB4_XkgaA8K-4DA&ip=8.4.122.173&id=o-AM8KU6-6C3NwvK4K4TV2zew4Ral7kQoyusYH9h4PBmae&itag=22&source=youtube&requiressl=yes&mh=gw&mm=31%2C26&mn=sn-a5mekn6d%2Csn-o097znz7&ms=au%2Conr&mv=m&mvi=4&pl=22&initcwndbps=1003750&vprv=1&mime=video%2Fmp4&ns=iMpiDponZg3nam3926dPYZoG&ratebypass=yes&dur=0.928&lmt=1540171742075258&mt=1646548611&fvip=4&fexp=24001373%2C24007246&c=WEB&txp=2211222&n=ox_DOIV39rb_k96Bn&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cns%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRQIgP--vmzg3xqKYIp3LM3zzUYl0gEYVtpzkSvpXhxWNpX0CIQCwfmLfGWUb0lani5nNsvB55wdcPYpeXCV7xFucohVTqg%3D%3D&lsparams=mh%2Cmm%2Cmn%2Cms%2Cmv%2Cmvi%2Cpl%2Cinitcwndbps&lsig=AG3C_xAwRQIgEHKZQ8emucwHlYL8z7Xk4QyWJm2_OJw0QF5p4g8M9tsCIQDDsw-LizUOQ_V01ENX3T_wNJ6I7JtmHP3whjePVH1-NA%3D%3D");
-				MediaPlayer msound=new MediaPlayer(sound);
-				msound.play();
-			}
+			
 			return s.dead;
 			
 		});
@@ -180,14 +207,15 @@ public class InvaderGame extends Pane{
 			}
 			}
 			this.requestFocus();
+			
 		});
 	}
 	
-	class Sprite extends Rectangle{
+	class Sprite extends ImageView{
 		public boolean dead=false;
 		public String type;
-	 public Sprite(int x,int y,int w,int h,String type,Color color) {
-		 super(w,h,color);
+	 public Sprite(int x,int y,String type,Image image) {
+		 super(image);
 		 this.type=type;
 		 setTranslateX(x);
 		 setTranslateY(y);

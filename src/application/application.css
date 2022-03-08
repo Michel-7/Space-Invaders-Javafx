@@ -36,3 +36,9 @@
 	-fx-font-family:'serif',cursive;
 	-fx-text-fill:white;
 }
+#highScoreLabel{
+	-fx-font-size: 20px;
+	-fx-fill:white;
+	-fx-font-family:'serif',cursive;
+	-fx-text-fill:white;
+	}
